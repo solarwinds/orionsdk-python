@@ -9,20 +9,20 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 setup(
-    name = "orionsdk",
-    version = "0.0.2", # Update also in __init__ ;
-    description = "Python API for the SolarWinds Orion SDK",
+    name="orionsdk",
+    version="0.0.2",  # Update also in __init__ ;
+    description="Python API for the SolarWinds Orion SDK",
     long_description="Python client for interacting with the SolarWinds Orion API",
-    author = "SolarWinds",
-    author_email = "tim.danner@solarwinds.com",
-    url = 'http://github.com/solarwinds/orionsdk-python',
-    license = 'https://github.com/solarwinds/orionsdk-python/blob/master/LICENSE',
-    packages= find_packages(exclude=['ez_setup', 'examples', 'tests']),
+    author="SolarWinds",
+    author_email="tim.danner@solarwinds.com",
+    url='http://github.com/solarwinds/orionsdk-python',
+    license='https://github.com/solarwinds/orionsdk-python/blob/master/LICENSE',
+    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     package_data={'': ['LICENSE', 'README.md']},
     include_package_data=True,
     keywords='solarwinds swis orion orionsdk',
-    platforms = 'Posix; MacOS X; Windows',
-    classifiers = [
+    platforms='Posix; MacOS X; Windows',
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
@@ -31,6 +31,6 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
-    dependency_links = [],
-    install_requires = ['six', 'requests'],
+    dependency_links=[],
+    install_requires=['six', 'requests'],
 )

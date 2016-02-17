@@ -47,4 +47,3 @@ class SwisClient:
                                 verify=False,
                                 auth=self.credentials,
                                 headers={'Content-Type': 'application/json'})
-

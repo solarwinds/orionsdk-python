@@ -18,6 +18,3 @@ results = swis.query("SELECT TOP 3 NodeID, DisplayName FROM Orion.Nodes")
 
 for row in results['results']:
     print("{NodeID:<5}: {DisplayName}".format(**row))
-
-
-
