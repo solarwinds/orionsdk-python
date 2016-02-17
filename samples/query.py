@@ -2,7 +2,6 @@ import requests
 from orionsdk import SwisClient
 
 npm_server = 'localhost'
-npm_server = 'dev-aus-josh-01'
 username = 'admin'
 password = ''
 
