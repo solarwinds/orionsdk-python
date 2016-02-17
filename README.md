@@ -5,7 +5,7 @@ This project contains a python client for interacting with the SolarWinds Orion 
 ## Install
 
 ```
-pip install orionsdk-python
+pip install orionsdk
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ pip install orionsdk-python
 ```
 import orionsdk
 
-swis = swisclient.SwisClient("server", "username", "password")
+swis = orionsdk.SwisClient("server", "username", "password")
 
 aliases = swis.invoke('Metadata.Entity', 'GetAliases', 'SELECT B.Caption FROM Orion.Nodes B')
 
