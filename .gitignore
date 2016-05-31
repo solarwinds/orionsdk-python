@@ -71,3 +71,7 @@ target/
 # IntelliJ IDEA IDE
 *.iml
 .idea/
+
+# Emacs editor saves
+*~
+\#*\#
