@@ -11,10 +11,11 @@ def _json_serial(obj):
 
 
 class SwisClient:
-    def __init__(self, hostname, username, password):
+    def __init__(self, hostname, username, password, verify=False):
         self.url = "https://{}:17778/SolarWinds/InformationService/v3/Json/".\
                 format(hostname)
         self.credentials = (username, password)
+        self.verify = verify
 
     def query(self, query, **params):
         return self._req(
@@ -44,6 +45,6 @@ class SwisClient:
     def _req(self, method, frag, data=None):
         return requests.request(method, self.url + frag,
                                 data=json.dumps(data, default=_json_serial),
-                                verify=False,
+                                verify=self.verify,
                                 auth=self.credentials,
                                 headers={'Content-Type': 'application/json'})

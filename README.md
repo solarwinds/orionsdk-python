@@ -10,7 +10,7 @@ pip install orionsdk
 
 ## Usage
 
-```
+```python
 import orionsdk
 
 swis = orionsdk.SwisClient("server", "username", "password")
@@ -20,6 +20,24 @@ aliases = swis.invoke('Metadata.Entity', 'GetAliases', 'SELECT B.Caption FROM Or
 print(aliases)
 ```
 
+## SSL Certificate Verification
+
+Initial support for SSL certificate valuation was added in 0.0.4. To
+enable this, you will need to save the self-signed cert to a file. One
+way of doing this is with OpenSSL:
+
+```bash
+openssl s_client -connect server:17778
+```
+
+Then add an entry to your hosts file for ``SolarWinds-Orion`` and you
+will be able to verify via doing the following:
+
+```python
+import orionsdk
+swis = orionsdk.SwisClient("SolarWinds-Orion", "username", "password", verify="server.pem")
+swis.query("SELECT NodeID from Orion.Nodes")
+```
 
 ## License
 
