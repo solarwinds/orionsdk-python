@@ -43,8 +43,10 @@ class SwisClient:
         self._req("DELETE", uri)
 
     def _req(self, method, frag, data=None):
-        return requests.request(method, self.url + frag,
+        resp = requests.request(method, self.url + frag,
                                 data=json.dumps(data, default=_json_serial),
                                 verify=self.verify,
                                 auth=self.credentials,
                                 headers={'Content-Type': 'application/json'})
+        resp.raise_for_status()
+        return resp
