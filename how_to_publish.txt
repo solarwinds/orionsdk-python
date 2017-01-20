@@ -1,0 +1,3 @@
+1. Increment build number in setup.py and orionsdk/__init__.py
+2. Run: python setup.py publish
+3. Submit changes (from step 1)
