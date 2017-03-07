@@ -2,6 +2,10 @@
 
 This project contains a python client for interacting with the SolarWinds Orion API
 
+## API Documentation
+
+For documentation about the SolarWinds Orion API, please see the [wiki](https://github.com/solarwinds/OrionSDK/wiki), [tools](https://github.com/solarwinds/OrionSDK/releases), and sample code (in languages other than Python) in the main [OrionSDK project](https://github.com/solarwinds/OrionSDK).
+
 ## Install
 
 ```
@@ -43,7 +47,7 @@ swis.query("SELECT NodeID from Orion.Nodes")
 
 	This software is licensed under the Apache License, version 2 ("ALv2"), quoted below.
 
-	Copyright © 2015 SolarWinds Worldwide, LLC.  All rights reserved.
+	Copyright Â© 2015 SolarWinds Worldwide, LLC.  All rights reserved.
 
 	Licensed under the Apache License, Version 2.0 (the "License"); you may not
 	use this file except in compliance with the License. You may obtain a copy of
