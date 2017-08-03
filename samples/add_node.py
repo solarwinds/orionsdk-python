@@ -30,7 +30,7 @@ def main():
     print("DONE!")
 
     # extract the nodeID from the result
-    nodeid = re.search('(\d+)$', results).group(0)
+    nodeid = re.search(r'(\d+)$', results).group(0)
 
     pollers_enabled = {
         'N.Status.ICMP.Native': True,
