@@ -14,7 +14,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 swis = SwisClient(npm_server, username, password)
 
 # Find the Uri you want to delete based on a SWQL query
-results = swis.query("SELECT IPAddress, Caption, Uri FROM Orion.Nodes WHERE IPAddress LIKE '127.0.0.5'")
+results = swis.query("SELECT IPAddress, Caption, Uri FROM Orion.Nodes WHERE IPAddress LIKE '127.0.0.6'")
 
 # Use as needed
 if len(results['results']) > 1:
@@ -22,6 +22,6 @@ if len(results['results']) > 1:
     [print("{Caption} - {IPAddress} - {Uri}".format(**row)) for row in results['results']]
 elif len(results['results']) == 1:
     response = swis.delete(results['results'][0]['Uri'])
-    print("Deleted Node - %s".format(response))
+    print("Deleted Node")
 else:
-    print("nothing to delete")
+    print("Nothing to delete")
