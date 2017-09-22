@@ -22,7 +22,10 @@ def main():
         'EngineID': 1,
         'ObjectSubType': 'SNMP',
         'SNMPVersion': 2,
-        'Community': community
+        'Community': community,
+
+        'DNS': '',
+        'SysName': ''
     }
 
     print("Adding node {}... ".format(props['IPAddress']), end="")
