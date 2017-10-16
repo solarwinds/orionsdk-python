@@ -13,20 +13,10 @@ if not verify:
 swis = SwisClient(npm_server, username, password)
 
 # select the top 3 nodes from the inventory
-results = swis.query("SELECT TOP 3 Caption, URI FROM Orion.Nodes")
-nodes = results['results']
+results = swis.query("SELECT TOP 3 N.CustomProperties.Uri FROM Orion.Nodes N")
 
-# build the body that will be passed to the query
-body = {"uris": [], "properties": {}}
-
-# add the URIs with a '/CustomProperties' suffix to each
-for node in nodes:
-    body["uris"].append(node["URI"] + "/CustomProperties")
-
-# set as many custom properties as you like
-body["properties"]["City"] = "Austin"
-body["properties"]["DeviceType"] = "Router"
-body["properties"]["Department"] = "Billing"
+# extract just the Uris from the results
+uris = [row['Uri'] for row in results['results']]
 
 # submit the request
-swis.bulkupdate(body)
+swis.bulkupdate(uris, City='Austin', DeviceType='Router', Department='Billing')
