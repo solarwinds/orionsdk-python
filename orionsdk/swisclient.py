@@ -39,6 +39,10 @@ class SwisClient:
     def update(self, uri, **properties):
         self._req("POST", uri, properties)
 
+    def bulkupdate(self, uris, **properties):
+        self._req("POST", "BulkUpdate", 
+            {'uris': uris, 'properties': properties})
+
     def delete(self, uri):
         self._req("DELETE", uri)
 
