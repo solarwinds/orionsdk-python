@@ -52,13 +52,13 @@ class SwisClient:
                                 verify=self.verify,
                                 auth=self.credentials,
                                 headers={'Content-Type': 'application/json'})
-		
+
         # try to extract reason from response when request returns error
         if 400 <= resp.status_code < 600:
             try:
-                resp.reason = json.loads(resp.text)['Message'];
+                resp.reason = json.loads(resp.text)['Message']
             except:
-                pass;
-			 
+                pass
+
         resp.raise_for_status()
         return resp
