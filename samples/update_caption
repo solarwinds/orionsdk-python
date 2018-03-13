@@ -1,0 +1,70 @@
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from swisclient import SwisClient
+import getpass
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+"""
+SCRIPT BY: JAF
+DATE: 19 Oct 2017
+VERSION: 1
+LAST CHANGE: Initial Production
+DESCRIPTION:
+This script updates the Caption field in Orion.Nodes to reflect the SysName for SNMP devices
+
+"""
+
+npm_server = "SERVERNAME OR IP"
+password = getpass.getpass(prompt='Password:  ')
+username = 'USERNAME'
+
+
+#Process the names into the Solarwinds database
+def update_caption(uri, Caption, SysName):
+		swis.update(uri, Caption=SysName)
+	
+#Set all Captions to uppercase and remove the FQDN
+def clean_caption(results_list):
+	for row in results_list:
+		row['Caption'] = row['Caption'].upper().split(".")[0]
+		row['DNS'] = row['DNS'].upper().split(".")[0]
+		row['SysName'] = row['SysName'].upper().split(".")[0]
+	return results_list
+	
+#Prints a list on screen for confirmation and prompts for confirmation
+def confirm(node_list):
+	for row in node_list:
+		if row['Vendor'] != 'Cisco':
+			print('{}'.format(row['Caption']) + ' --> ' + '{}'.format(row['DNS'].upper().split(".")[0]))
+		else:
+			print('{}'.format(row['Caption']) + ' --> ' + '{}'.format(row['SysName'].upper().split(".")[0]))
+	if node_list:
+		return input('confirm all...[yes/no]:   ')
+	else:
+		return 'no'
+		
+#If you type yes, it proceeds to process the list of nodes into the Solarwinds database
+def process_nodes(answer, nodes):
+	if answer.upper() == 'YES':
+		for row in nodes:
+			if row['Vendor'] != 'Cisco':
+				update_caption(row['Uri'], row['Caption'], row['DNS'])
+			else:
+				update_caption(row['Uri'], row['Caption'], row['SysName'])
+	else:
+		print('Process canceled by user or no data found')
+
+#Opening a connection to Solarwinds API and pulling all the CISCO nodes out		
+swis = SwisClient(npm_server, username, password)
+results = swis.query("SELECT Uri, Caption, ObjectSubType, DNS, SysName, Vendor FROM Orion.Nodes WHERE Vendor = 'Cisco' AND SysName <> ''")
+cleaned_nodes = list()
+
+#Creating a list of CISCO Nodes
+for row in results['results']:
+		cleaned_nodes.append(row)
+		
+#Cleaning the node names
+clean_caption(cleaned_nodes)
+
+#Processing the nodes into Solarwinds
+process_nodes(confirm(cleaned_nodes), cleaned_nodes)
