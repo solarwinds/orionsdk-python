@@ -1,0 +1,83 @@
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from swisclient import SwisClient
+import getpass
+import xml.etree.ElementTree as ET
+import xml.dom.minidom
+import re
+import datetime
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+"""
+SCRIPT BY: JAF
+DATE: 11 Oct 2017
+VERSION: 1
+LAST CHANGE: Initial Production
+DESCRIPTION:
+This is a script to pull all the nodes out of the Solarwinds database
+and process them into an xml format that can be imported into SecureCRT and
+sorts the nodes into Region -> Site folders.
+
+"""
+
+
+def Populate_DB():
+	#Method for updating the SecureCRT Database from Solarwinds. Pulls the information from SWIS API using SWQL, puts it into a nested dictionary,
+	#then converts all the information into an XML file to be imported into SecureCRT
+	NPM_Server = "SERVERNAME OR IP"
+	username = "USERNAME"
+	password = getpass.getpass(prompt='Enter Solarwinds Password:')
+	
+	swis = SwisClient(NPM_Server, username, password)
+	
+	#Grabbing the information from SWIS
+	results = swis.query("SELECT SysName, IPAddress, Nodes.CustomProperties.Region, Nodes.CustomProperties.Site FROM Orion.Nodes WHERE Vendor = 'Cisco' AND Nodes.CustomProperties.Region <> '' AND Nodes.CustomProperties.Site <> ''")
+	
+	#Extracting the unique region names
+	sites = set()
+	for row in results["results"]:
+		sites.add(row["Region"])
+		
+	local = {}
+
+	for row in results["results"]:
+		local[row["Site"]] = row["Region"]
+	
+	#Pulling curent time to display when the XML file was generated
+	current_time = datetime.datetime.now()
+	current_time = current_time.strftime("%d-%m-%Y")
+	
+	#Start creating the tree and mapping the data to each element
+	root = ET.Element("VanDyke", version="3.0")
+	sub_root = ET.Element("key", name="Sessions")
+	root.append(sub_root)
+	sub_root.append(ET.Element("key", name="#Exported- {}".format(current_time)))	
+	for props in sites:
+		region_folder = ET.Element("key", name=props)
+		sub_root.append(region_folder)
+		for key1, key2 in local.items():
+			if key2 == props:
+				site_folder = ET.Element("key", name=key1)
+				region_folder.append(site_folder)
+				for row in results["results"]:
+					if row["Site"] == key1:
+						device = ET.Element("key", name=row["SysName"].upper().split('.')[0])
+						site_folder.append(device)
+						port = ET.Element("dword", name="[SSH2] Port")
+						port.text = "22"
+						device.append(port)
+						ip_address = ET.Element("string", name="Hostname")
+						ip_address.text = row["IPAddress"]
+						device.append(ip_address)
+						protocol = ET.Element("string", name="Protocol Name")
+						protocol.text = "SSH2"
+						device.append(protocol)
+
+
+	#Print the generated XML to a file
+	my_xml = xml.dom.minidom.parseString(ET.tostring(root)).toprettyxml(indent="	")
+	with open("NewSecureCRTDB.xml", "w") as f:
+		f.write(my_xml)
+		
+#Running the Method to update the SecureCRT Database	
+Populate_DB()
+	
