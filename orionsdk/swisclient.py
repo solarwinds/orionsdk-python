@@ -40,7 +40,7 @@ class SwisClient:
         self._req("POST", uri, properties)
 
     def bulkupdate(self, uris, **properties):
-        self._req("POST", "BulkUpdate", 
+        self._req("POST", "BulkUpdate",
             {'uris': uris, 'properties': properties})
 
     def delete(self, uri):
@@ -51,7 +51,8 @@ class SwisClient:
                                 data=json.dumps(data, default=_json_serial),
                                 verify=self.verify,
                                 auth=self.credentials,
-                                headers={'Content-Type': 'application/json'})
+                                headers={'Content-Type': 'application/json'},
+                                timeout=30)
 
         # try to extract reason from response when request returns error
         if 400 <= resp.status_code < 600:
