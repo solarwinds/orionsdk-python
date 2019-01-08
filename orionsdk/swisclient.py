@@ -11,11 +11,13 @@ def _json_serial(obj):
 
 
 class SwisClient:
-    def __init__(self, hostname, username, password, verify=False):
+    def __init__(self, hostname, username, password, verify=False, session=None):
         self.url = "https://{}:17778/SolarWinds/InformationService/v3/Json/".\
                 format(hostname)
-        self.credentials = (username, password)
-        self.verify = verify
+        self._session = session or requests.Session()
+        self._session.auth = (username, password)
+        self._session.headers.update({'Content-Type': 'application/json'})
+        self._session.verify = verify
 
     def query(self, query, **params):
         return self._req(
@@ -47,12 +49,9 @@ class SwisClient:
         self._req("DELETE", uri)
 
     def _req(self, method, frag, data=None):
-        resp = requests.request(method, self.url + frag,
-                                data=json.dumps(data, default=_json_serial),
-                                verify=self.verify,
-                                auth=self.credentials,
-                                headers={'Content-Type': 'application/json'},
-                                timeout=30)
+        resp = self._session.request(method, 
+                                     self.url + frag,
+                                     data=json.dumps(data, default=_json_serial))
 
         # try to extract reason from response when request returns error
         if 400 <= resp.status_code < 600:
