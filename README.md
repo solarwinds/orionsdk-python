@@ -43,52 +43,6 @@ swis = orionsdk.SwisClient("SolarWinds-Orion", "username", "password", verify="s
 swis.query("SELECT NodeID from Orion.Nodes")
 ```
 
-## Setting Timeout
-
-```python
-import orionsdk
-import requests
-
-session = requests.Session()
-session.timeout = 30 # Set your timeout in seconds
-swis = orionsdk.SwisClient("SolarWinds-Orion", "username", "password", verify="server.pem", session=session)
-swis.query("SELECT NodeID from Orion.Nodes")
-```
-
-## Setting Retry 
-
-```python
-import orionsdk
-import requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-
-
-def retry_session(retries=3,
-                  backoff_factor=0.3,
-                  status_forcelist=(500, 502, 504)):
-    session = requests.Session()
-    retry = Retry(
-        total=retries,
-        read=retries,
-        connect=retries,
-        backoff_factor=backoff_factor,
-        status_forcelist=status_forcelist)
-    adapter = HTTPAdapter(max_retries=retry)
-    session.mount('http://', adapter)
-    session.mount('https://', adapter)
-    return session
-
-
-swis = orionsdk.SwisClient(
-    "SolarWinds-Orion",
-    "username",
-    "password",
-    verify="server.pem",
-    session=retry_session())
-swis.query("SELECT NodeID from Orion.Nodes")
-```
-
 ## License
 
 	This software is licensed under the Apache License, version 2 ("ALv2"), quoted below.
