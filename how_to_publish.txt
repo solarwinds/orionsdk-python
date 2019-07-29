@@ -1,3 +1,6 @@
+Requires twine (pip install twine)
+
 1. Increment build number in setup.py and orionsdk/__init__.py
 2. Run: python setup.py publish
-3. Submit changes (from step 1)
+
+Step 2 creates a source distribution in the dist folder, then uses twine to upload to pypi.org.  You will be prompted for the user name and password.

@@ -5,16 +5,17 @@ import sys
 from setuptools import setup, find_packages
 
 if sys.argv[-1] == 'publish':
-    os.system('python setup.py sdist upload')
+    os.system('python setup.py sdist')
+    os.system('twine upload dist/*')
     sys.exit()
 
 setup(
     name="orionsdk",
-    version="0.0.8",  # Update also in __init__ ;
+    version="0.1.0",  # Update also in __init__ ;
     description="Python API for the SolarWinds Orion SDK",
     long_description="Python client for interacting with the SolarWinds Orion API",
     author="SolarWinds",
-    author_email="tim.danner@solarwinds.com",
+    author_email="dan.jagnow@solarwinds.com",
     url='http://github.com/solarwinds/orionsdk-python',
     license='https://github.com/solarwinds/orionsdk-python/blob/master/LICENSE',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
