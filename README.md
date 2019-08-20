@@ -106,3 +106,9 @@ swis.query("SELECT NodeID from Orion.Nodes")
 	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 	License for the specific language governing permissions and limitations under
 	the License.
+
+## Related Projects
+
+### Solarwinds Interface Traffic Forecaster
+
+[SolarwindsInterfaceTrafficPrediction](https://github.com/andrewbury/SolarwindsInterfaceTrafficPrediction) is an example of using the Orion SDK for Python and machine learning techniques to predict network interface traffic.
