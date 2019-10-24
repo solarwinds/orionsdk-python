@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Solarwinds Class Overview
+"""SolarWinds Class Overview
 
-The following class is used to create an object representing a Solarwinds NPM instance.  The object provides simple
-getter and setter methods for common Solarwinds actions.  These methods abstract out the underlying details and SQL
-calls making Solarwinds automation more accessible to a broader audience.
+The following class is used to create an object representing a SolarWinds Orion instance.  The object provides simple
+getter and setter methods for common SolarWinds actions.  These methods abstract out the underlying details and SWQL
+calls making SolarWinds automation more accessible to a broader audience.
 
 """
 
@@ -11,21 +11,21 @@ import logging
 from orionsdk import SwisClient
 
 
-class Solarwinds:
+class SolarWinds:
 
     def __init__(self, npm_server, username, password, logger=None):
 
         self.logger = logger or logging.getLogger('__name__')
 
-        # Create the Swis client for use throughout the instance.
+        # Create the SWIS client for use throughout the instance.
         self.swis = SwisClient(npm_server, username, password)
 
     def does_node_exist(self, node_name):
-        """ Checks to see if a Solarwinds node exists with the given name.  Calls the get_node_id method of the class
+        """ Checks to see if a SolarWinds node exists with the given name.  Calls the get_node_id method of the class
             and uses the returned value to determine whether or not the node exists.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 True: The node exists.
@@ -39,11 +39,11 @@ class Solarwinds:
             return False
 
     def get_node_id(self, node_name):
-        """ Returns the NodeID for the given NodeName.  Uses a Swis query to the Solarwinds database to retrieve this
+        """ Returns the NodeID for the given NodeName.  Uses a SWIS query to the SolarWinds database to retrieve this
             information.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 node_id (string): The node ID that corresponds to the specified node name.
@@ -61,11 +61,11 @@ class Solarwinds:
             return ""
 
     def get_node_uri(self, node_name):
-        """ Returns the NodeURI for the given NodeName.  Uses a Swis query to the Solarwinds database to retrieve this
+        """ Returns the NodeURI for the given NodeName.  Uses a SWIS query to the SolarWinds database to retrieve this
             information.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 node_id (string): The node URI that corresponds to the specified node name.
@@ -83,12 +83,12 @@ class Solarwinds:
 
     def add_node_using_snmp_v3(self, node_name, ip_address, snmpv3_username, snmpv3_priv_method, snmpv3_priv_pwd,
                                snmpv3_auth_method, snmpv3_auth_pwd):
-        """ Creates a new node using the supplied name an ip address.  Configure with our standard SNMPv3 credentials.
+        """ Creates a new node using the supplied name an IP address.  Configure with our standard SNMPv3 credentials.
             Once created, attached all of the standard Cisco pollers.
 
             Args:
                 node_name(string): A node name to be used for the newly created node object.
-                ip_address(string): The ip address that is associated with the supplied node name.
+                ip_address(string): The IP address that is associated with the supplied node name.
                 snmpv3_username(string): The SNMPv3 username that will be associated with the node object.
                 snmpv3_priv_method(string): The SNMPv3 privilege method that will be used.
                 snmpv3_priv_pwd (string): The SNMPv3 privilege password that will be used.
@@ -132,12 +132,12 @@ class Solarwinds:
             self.attach_poller_to_node(node_name, 'N.Uptime.SNMP.Generic')
 
     def is_poller_attached_to_node(self, node_name, poller_name):
-        """ Checks to see if the specified poller is attached to the specified node.  Makes a swis query to see
+        """ Checks to see if the specified poller is attached to the specified node.  Makes a SWIS query to see
             if there's a corresponding entry in the Orion.Pollers table.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
-                poller_name(string): The name of the poller as represented in the Solarwinds database.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+                poller_name(string): The name of the poller as represented in the SolarWinds database.
 
             Returns:
                 True: The poller is currently attached to the node.
@@ -158,12 +158,12 @@ class Solarwinds:
             return False
 
     def attach_poller_to_node(self, node_name, poller_name, enabled=True):
-        """ Checks to see if the specified poller is attached to the specified node.  If it is not, a swis create is
+        """ Checks to see if the specified poller is attached to the specified node.  If it is not, a SWIS create is
             executed against Orion.Pollers to attach the poller to the node.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
-                poller_name(string): The name of the poller as represented in the Solarwinds database.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+                poller_name(string): The name of the poller as represented in the SolarWinds database.
                 enabled(boolean): Whether or not to enable the attached poller.
 
             Returns:
@@ -187,11 +187,11 @@ class Solarwinds:
             self.logger.info("attach_poller_to_node - poller create results: %s", results)
 
     def enable_hardware_health_on_node(self, node_name):
-        """ Enables the hardware health monitoring on the specified node.  Executes a swis invoke of the
+        """ Enables the hardware health monitoring on the specified node.  Executes a SWIS invoke of the
             'EnableHardwareHealth' verb, passing it the node's net object ID.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 None.
@@ -205,11 +205,11 @@ class Solarwinds:
         self.logger.info("enable_hardware_health - enable hardware health invoke results: %s", results)
 
     def add_node_to_ncm(self, node_name):
-        """ Adds the specified node to the Solarwinds NCM module.  Executes a swis invoke of the
+        """ Adds the specified node to the SolarWinds NCM module.  Executes a SWIS invoke of the
             'AddNodetoNCM' verb, passing it the node's object ID.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 None.
@@ -261,13 +261,13 @@ class Solarwinds:
         }
 
         results = self.swis.create('Orion.IpSla.Operations', **ip_sla_properties)
-        self.logger.info("add_icmp_echo_ip_sla_operation_to_node - add ip sla operation to node create results: %s", results)
+        self.logger.info("add_icmp_echo_ip_sla_operation_to_node - add IP SLA operation to node create results: %s", results)
 
     def set_custom_properties(self, node_name, custom_property_name, custom_property_value):
         """ For a given node, sets the specified custom property to the specified value.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 custom_property_name(string): The custom property who's value we want to change.  The custom property
                     needs to have been previously created or nothing will be changed.
                 custom_property_value(string): The desired value that the custom property will be set to.
@@ -289,7 +289,7 @@ class Solarwinds:
         """ For a given node, gets a list of the custom properties and values associated with it.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 custom_properties(list): A list of dictionaries.  Each dictionary is a single key/value pair that contains
@@ -308,7 +308,7 @@ class Solarwinds:
         """ For a given node, gets a list of the currently assigned custom pollers.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 custom_pollers(dictionary): Returns a dictionary that represents all of the custom pollers attached to
@@ -329,7 +329,7 @@ class Solarwinds:
         """ For a given node, detaches the specified custom poller.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 poller_name(string): The name of the custom poller that will be removed from the node.
 
             Returns:
@@ -354,7 +354,7 @@ class Solarwinds:
         """ For a given node, attaches the specified custom poller.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 poller_name(string): The name of the custom poller which is to be attached to the specified node.
 
             Returns:
@@ -377,11 +377,11 @@ class Solarwinds:
         self.swis.create('Orion.NPM.CustomPollerAssignmentOnNode', **poller_properties)
 
     def does_group_exist(self, group_name):
-        """ Checks to see if a Solarwinds group exists with the given name.  Calls the get_group_id method of the class
+        """ Checks to see if a SolarWinds group exists with the given name.  Calls the get_group_id method of the class
             and uses the returned value to determine whether or not the group exists.
 
             Args:
-                group_name(string): A group name which should equal the name used in Solarwinds for the container
+                group_name(string): A group name which should equal the name used in SolarWinds for the container
                     object.
 
             Returns:
@@ -396,11 +396,11 @@ class Solarwinds:
             return False
 
     def get_group_id(self, group_name):
-        """ Returns the ContainerID for the given Group Name.  Uses a Swis query to the Solarwinds database to retrieve
+        """ Returns the ContainerID for the given Group Name.  Uses a SWIS query to the SolarWinds database to retrieve
             this information.
 
             Args:
-                group_name(string): A group name which should equal the name used in Solarwinds for the container
+                group_name(string): A group name which should equal the name used in SolarWinds for the container
                     object.
 
             Returns:
@@ -418,11 +418,11 @@ class Solarwinds:
             return ""
 
     def get_group_uri(self, group_name):
-        """ Returns the ContainerUrifor the given Group Name.  Uses a Swis query to the Solarwinds database to retrieve this
+        """ Returns the ContainerUri for the given Group Name.  Uses a SWIS query to the SolarWinds database to retrieve this
             information.
 
             Args:
-                group_name(string): A group name which should equal the name used in Solarwinds for the container object.
+                group_name(string): A group name which should equal the name used in SolarWinds for the container object.
 
             Returns:
                 group_uri (string): The group URI that corresponds to the specified group name.
@@ -468,12 +468,12 @@ class Solarwinds:
             self.logger.info("add_group - add group invoke results: %s", results)
 
     def is_node_in_group(self, node_name, group_name):
-        """ Checks to see if a node is a member of a particular group.  Runs a swis query against the ContainerMembers
+        """ Checks to see if a node is a member of a particular group.  Runs a SWIS query against the ContainerMembers
             table to see if there's a corresponding table entry.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
-                group_name(string): A group name which should equal the name used in Solarwinds for the container
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+                group_name(string): A group name which should equal the name used in SolarWinds for the container
                     object.
 
             Returns:
@@ -492,12 +492,12 @@ class Solarwinds:
             return False
 
     def add_node_to_group(self, node_name, group_name):
-        """ If the specified node is not already in the specified group, a swis invoke of Orion.Container.AddDefinition
+        """ If the specified node is not already in the specified group, a SWIS invoke of Orion.Container.AddDefinition
             is made to add the node to the group.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
-                group_name(string): A group name which should equal the name used in Solarwinds for the container object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+                group_name(string): A group name which should equal the name used in SolarWinds for the container object.
 
             Returns:
                 None.
@@ -512,7 +512,7 @@ class Solarwinds:
         """ Delete a group that has the specified group id.
 
             Args:
-                group_id(string): A group id which should equal the ContainerID used in Solarwinds for the container
+                group_id(string): A group id which should equal the ContainerID used in SolarWinds for the container
                     object.
 
             Returns:
@@ -526,7 +526,7 @@ class Solarwinds:
         """ Delete a group that has the specified group name.
 
             Args:
-                group_name(string): A group name which should equal the Name used in Solarwinds for the container
+                group_name(string): A group name which should equal the Name used in SolarWinds for the container
                     object.
 
             Returns:
@@ -539,11 +539,11 @@ class Solarwinds:
         self.delete_group_by_id(group_id)
 
     def does_dependency_exist(self, dependency_name):
-        """ Checks to see if a Solarwinds dependency exists with the given name.  Calls the get_dependency_id method of
+        """ Checks to see if a SolarWinds dependency exists with the given name.  Calls the get_dependency_id method of
             the class and uses the returned value to determine whether or not the dependency exists.
 
             Args:
-                dependency_name(string): A dependency name which should equal the name used in Solarwinds for the
+                dependency_name(string): A dependency name which should equal the name used in SolarWinds for the
                     dependency object.
 
             Returns:
@@ -558,11 +558,11 @@ class Solarwinds:
             return False
 
     def get_dependency_id(self, dependency_name):
-        """ Returns the DependencyID for the given Dependency Name.  Uses a Swis query to the Solarwinds database to
+        """ Returns the DependencyID for the given Dependency Name.  Uses a SWIS query to the SolarWinds database to
             retrieve this information.
 
             Args:
-                dependency_name(string): A dependency name which should equal the name used in Solarwinds for the
+                dependency_name(string): A dependency name which should equal the name used in SolarWinds for the
                     dependency object.
 
             Returns:
@@ -580,7 +580,7 @@ class Solarwinds:
             return ""
 
     def add_dependency(self, dependency_name, parent_name, child_name):
-        """ Creates a new dependency using the specified parent and child.  Does a swis create to the Orion.Dependencies
+        """ Creates a new dependency using the specified parent and child.  Does a SWIS create to the Orion.Dependencies
             table to create the dependency.
 
             Args:
@@ -634,11 +634,11 @@ class Solarwinds:
             self.swis.create('Orion.Dependencies', **dependency_properties)
 
     def get_list_of_interfaces(self, node_name):
-        """ Returns a dictionary of existing Interfaces on a given Node Name. Uses a Swis query to the Solarwinds
+        """ Returns a dictionary of existing Interfaces on a given Node Name. Uses a SWIS query to the SolarWinds
             database to retrieve this information.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
             Returns:
                 list_interfaces_names(dictionary): Returns a dictionary that represents all of the interfaces, by name,
                 attached to the node.
@@ -661,7 +661,7 @@ class Solarwinds:
         """ For a given node, remove the given interface from the node using the interface name.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 interface_name(string): The name of the interface that will be removed from the node.
             Returns:
                 True: Interface was successfully removed.
@@ -678,11 +678,11 @@ class Solarwinds:
             return False
 
     def get_interface_uri(self, node_name, interface_name):
-        """ Returns the URI for a given interface belonging to a given node. Uses a Swis query to the Solarwinds
+        """ Returns the URI for a given interface belonging to a given node. Uses a SWIS query to the SolarWinds
             database to retrieve this information
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 interface_name(string): The name of the interface that you are getting the URI for
 
             Returns:
@@ -702,11 +702,11 @@ class Solarwinds:
             return ""
 
     def get_interface_id(self, node_name, interface_name):
-        """ Returns the InterfaceID for a given interface belonging to a given node. Uses a Swis query to the Solarwinds
+        """ Returns the InterfaceID for a given interface belonging to a given node. Uses a SWIS query to the SolarWinds
             database to retrieve this information
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 interface_name(string): The name of the interface that you are getting the ID of.
 
             Returns:
@@ -725,12 +725,12 @@ class Solarwinds:
             return ""
 
     def does_interface_exist(self, node_name, interface_name):
-        """ Checks to see if a Solarwinds interface, belonging to a given node, exists with the given name. Calls the
+        """ Checks to see if a SolarWinds interface, belonging to a given node, exists with the given name. Calls the
             get_interface_id method of the class and uses the returned value to determine whether or not the interface
             exists.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 interface_name(string): The name of the interface that you are getting the URI for
 
             Returns:
@@ -745,11 +745,11 @@ class Solarwinds:
             return False
 
     def get_discovered_interfaces(self, node_name):
-        """ Returns a dictionary of Discovered Interfaces on a node given that node's name. Uses a Swis invoke for
+        """ Returns a dictionary of Discovered Interfaces on a node given that node's name. Uses a SWIS invoke for
             DiscoverInterfacesOnNode.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 discovered_interfaces(Dictionary): The set of discovered interfaces on the node.
@@ -763,10 +763,10 @@ class Solarwinds:
 
     def add_interface(self, node_name, interface_name):
         """ For a given node, attach the given interface by that interface's name. The given interface must be a
-            discovered interface to be attached to the node. Uses a Swis invoke for AddInterfacesOnNode.
+            discovered interface to be attached to the node. Uses a SWIS invoke for AddInterfacesOnNode.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
                 interface_name(string): The name of the interface that will be added to the node.
 
             Returns:
@@ -797,11 +797,11 @@ class Solarwinds:
             return False
 
     def ncm_download_nodes_running_config(self, node_name):
-        """ For a given node, download the node's running configuration. Uses a Swis query to find the Cirrus node I.
+        """ For a given node, download the node's running configuration. Uses a SWIS query to find the Cirrus node I.
             Uses a Swis invoke of DownloadConfig.
 
             Args:
-                node_name(string): A node name which should equal the caption used in Solarwinds for the node object.
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 None.
@@ -816,11 +816,11 @@ class Solarwinds:
         self.swis.invoke('Cirrus.ConfigArchive', 'DownloadConfig', [cirrus_node_id], 'Running')
 
     def ncm_run_compliance_report(self, report_name):
-        """ For a given report name, run the Policy Report. Uses a Swis query to get the policy report ID. Uses a
-            Swis invoke of StartCaching to run the policy report.
+        """ For a given report name, run the Policy Report. Uses a SWIS query to get the policy report ID. Uses a
+            SWIS invoke of StartCaching to run the policy report.
 
             Args:
-                report_name(string): A report name which should equal the Name used in Solarwinds for a Policy
+                report_name(string): A report name which should equal the Name used in SolarWinds for a Policy
                     Report object
 
             Returns:
