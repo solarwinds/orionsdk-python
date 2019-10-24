@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from .swisclient import SwisClient
+from .solarwinds import SolarWinds
 
 
 __version__ = "0.2.0"
