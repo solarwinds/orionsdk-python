@@ -11,7 +11,7 @@ if sys.argv[-1] == 'publish':
 
 setup(
     name="orionsdk",
-    version="0.2.0",  # Update also in __init__ ;
+    version="0.3.0",  # Update also in __init__ ;
     description="Python API for the SolarWinds Orion SDK",
     long_description="Python client for interacting with the SolarWinds Orion API",
     author="SolarWinds",
