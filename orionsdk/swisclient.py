@@ -48,6 +48,9 @@ class SwisClient:
     def delete(self, uri):
         self._req("DELETE", uri)
 
+    def bulkdelete(self, uris):
+        self._req("POST", "BulkDelete", {'uris': uris})
+
     def _req(self, method, frag, data=None):
         resp = self._session.request(method, 
                                      self.url + frag,
