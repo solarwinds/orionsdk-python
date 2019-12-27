@@ -263,7 +263,7 @@ class SolarWinds:
         results = self.swis.create('Orion.IpSla.Operations', **ip_sla_properties)
         self.logger.info("add_icmp_echo_ip_sla_operation_to_node - add IP SLA operation to node create results: %s", results)
 
-            def add_group_custom_property(self, property_name, description, value_type, size):
+    def add_group_custom_property(self, property_name, description, value_type, size):
         """ Add a new group custom property with the specified name and details.
 
             Args:
