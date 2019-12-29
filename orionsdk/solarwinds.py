@@ -674,6 +674,7 @@ class SolarWinds:
         if self.does_interface_exist(node_name, interface_name):
             self.logger.info("remove_interface_by_name - interface_uri query results: %s", interface_uri)
             self.swis.delete(interface_uri)
+            return True
         else:
             return False
 
