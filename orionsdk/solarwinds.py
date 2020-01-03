@@ -875,14 +875,14 @@ class SolarWinds:
         report_id = results['results'][0]['PolicyReportID']
         self.swis.invoke('Cirrus.PolicyReports', 'StartCaching', [report_id])
 
-    def add_dns_a_record_with_ptr_to_ipam(self, name, ip_address, domain, server):
+    def add_dns_a_record_with_ptr_to_ipam(self, name, ip_address, server, domain):
         """ Add a DNS A and PTR record to the specified domain with the supplied name and IP address.
 
             Args:
                 ip_address(string):  The IP address to be used in the new DNS record.
                 name(string): The name to be used in the new DNS record.
-                domain(string): The domain that the new DNS record will be added to.
                 server(string): The name or IP of the DNS server that hosts the domain.
+                domain(string): The domain that the new DNS record will be added to.
 
             Returns:
                 None.
