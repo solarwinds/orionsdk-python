@@ -263,7 +263,48 @@ class SolarWinds:
         results = self.swis.create('Orion.IpSla.Operations', **ip_sla_properties)
         self.logger.info("add_icmp_echo_ip_sla_operation_to_node - add IP SLA operation to node create results: %s", results)
 
-    def set_custom_properties(self, node_name, custom_property_name, custom_property_value):
+    def add_group_custom_property(self, property_name, description, value_type, size):
+        """ Add a new group custom property with the specified name and details.
+
+            Args:
+                property_name(string): Name of the new group property.
+                description(string): Description for the new group property.
+                value_type(string): Value type for the new group property (string, integer, datetime, single, double,
+                    boolean)
+                size(integer): The maximum length for string value types.  Ignored for other value types.
+
+            Returns:
+                None.
+
+        """
+
+        results = self.swis.invoke('Orion.GroupCustomProperties', 'CreateCustomProperty', property_name, description,
+                                   value_type, size, "", "", "", "", "", "")
+        self.logger.info("add_group_custom_property - add group custom property results: %s", results)
+
+    def set_group_custom_property(self, group_name, custom_property_name, custom_property_value):
+        """ For a given group, sets the specified custom property to the specified value.
+
+            Args:
+                group_name(string): A group name which should equal the caption used in Solarwinds for the group object.
+                custom_property_name(string): The custom property who's value we want to change.  The custom property
+                    needs to have been previously created or nothing will be changed.
+                custom_property_value(string): The desired value that the custom property will be set to.
+
+            Returns:
+                None.
+
+        """
+
+        group_uri = self.get_group_uri(group_name)
+
+        custom_property = {
+            custom_property_name: custom_property_value
+        }
+
+        self.swis.update(group_uri + '/CustomProperties', **custom_property)
+        
+    def set_node_custom_property(self, node_name, custom_property_name, custom_property_value):
         """ For a given node, sets the specified custom property to the specified value.
 
             Args:
@@ -285,7 +326,7 @@ class SolarWinds:
 
         self.swis.update(node_uri + '/CustomProperties', **custom_property)
 
-    def get_custom_properties(self, node_name):
+    def get_node_custom_properties(self, node_name):
         """ For a given node, gets a list of the custom properties and values associated with it.
 
             Args:
@@ -835,3 +876,19 @@ class SolarWinds:
         report_id = results['results'][0]['PolicyReportID']
         self.swis.invoke('Cirrus.PolicyReports', 'StartCaching', [report_id])
 
+    def add_dns_a_record_with_ptr_to_ipam(self, name, ip_address, server, domain):
+        """ Add a DNS A and PTR record to the specified domain with the supplied name and IP address.
+
+            Args:
+                ip_address(string):  The IP address to be used in the new DNS record.
+                name(string): The name to be used in the new DNS record.
+                server(string): The name or IP of the DNS server that hosts the domain.
+                domain(string): The domain that the new DNS record will be added to.
+
+            Returns:
+                None.
+
+        """
+
+        self.swis.invoke('IPAM.IPAddressManagement', 'AddDnsARecordWithPtr', name, ip_address, server, domain)
+  
