@@ -1,0 +1,9 @@
+[Unit]
+Description=Orion startup scipts to register machine in Orion
+After=network-online.target
+
+[Service]
+ExecStart=/bin/bash /home/orionscripts/startup.sh
+ 
+[Install]
+WantedBy=multi-user.target

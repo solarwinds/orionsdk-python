@@ -1,0 +1,14 @@
+[Unit]
+Description=Orion shutdown scipts to remove machine from Orion
+Requires=network.target
+DefaultDependencies=no
+Before=shutdown.target reboot.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/bin/true
+ExecStop=/bin/bash /home/orionscripts/shutdown.sh
+ 
+[Install]
+WantedBy=multi-user.target
