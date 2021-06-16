@@ -81,6 +81,51 @@ class SolarWinds:
         else:
             return ""
 
+    def get_node_name_from_ip(self, ip_addr):
+        """ Returns the NodeName for the given IP_Address.  Uses a SWIS query to the SolarWinds database to retrieve this
+            information.
+
+            Args:
+                ip_addr(string): An IP which should equal the IP_Address used in SolarWinds for the node object.
+
+            Returns:
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+
+        """
+
+        node_uri = self.swis.query("SELECT Caption, IP_Address FROM Orion.Nodes WHERE IP_Address = @ip_addr",
+                                   ip_addr=ip_addr)
+        self.logger.info("get_node_uri - node uri query results: %s.", node_uri)
+        if node_uri['results']:
+            return node_uri['results'][0]['Caption']
+        else:
+            return ""
+
+
+
+    def get_ncmnode_id(self, node_name):
+        """ Returns the NCM NodeID for the given NodeName.  Uses a SWIS query to the SolarWinds database to retrieve this
+            information.
+
+            Args:
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+
+            Returns:
+                node_id (string): The ncm node id that corresponds to the specified node name.
+
+        """
+
+        node_uri = self.swis.query("SELECT NodeCaption, NodeID FROM NCM.Nodes WHERE NodeCaption = @caption",
+                                   caption=node_name)
+
+        self.logger.info("get_node_uri - node uri query results: %s.", node_uri)
+        if node_uri['results']:
+            return node_uri['results'][0]['NodeID']
+        else:
+            return ""
+
+
+
     def add_node_using_snmp_v3(self, node_name, ip_address, snmpv3_username, snmpv3_priv_method, snmpv3_priv_pwd,
                                snmpv3_auth_method, snmpv3_auth_pwd):
         """ Creates a new node using the supplied name an IP address.  Configure with our standard SNMPv3 credentials.
@@ -218,6 +263,21 @@ class SolarWinds:
 
         results = self.swis.invoke('Cirrus.Nodes', 'AddNodeToNCM', self.get_node_id(node_name))
         self.logger.info("add_node_to_ncm - add node to ncm invoke results: %s", results)
+    
+    def remove_node_from_ncm(self, node_name):
+        """ Removes the specified node from the SolarWinds NCM module. Executes a SWIS invoke of the
+            'RemoveNode' verb, passing it the node's NCM node id.
+
+            Args:
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+
+            Returns:
+                None.
+
+        """
+
+        results = self.swis.invoke('Cirrus.Nodes', 'RemoveNode', self.get_ncmnode_id(node_name))
+        self.logger.info("remove_node_from_ncm - add node to ncm invoke results: %s", results)
 
     def add_node_to_udt(self, node_name):
         udt_properties = {
