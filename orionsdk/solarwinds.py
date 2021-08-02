@@ -101,9 +101,7 @@ class SolarWinds:
         else:
             return ""
 
-
-
-    def get_ncmnode_id(self, node_name):
+    def get_ncmnode_id(self, node_caption):
         """ Returns the NCM NodeID for the given NodeName.  Uses a SWIS query to the SolarWinds database to retrieve this
             information.
 
@@ -115,12 +113,12 @@ class SolarWinds:
 
         """
 
-        node_uri = self.swis.query("SELECT NodeCaption, NodeID FROM NCM.Nodes WHERE NodeCaption = @caption",
-                                   caption=node_name)
+        node_id = self.swis.query("SELECT NodeID, NodeCaption FROM NCM.Nodes WHERE NodeCaption = @caption",
+                                   caption=node_caption)
 
-        self.logger.info("get_node_uri - node uri query results: %s.", node_uri)
-        if node_uri['results']:
-            return node_uri['results'][0]['NodeID']
+        self.logger.info("get_ncmnode_id - NCM node uri query results: %s.", node_id)
+        if node_caption['results']:
+            return node_caption['results'][0]['NodeID']
         else:
             return ""
 
