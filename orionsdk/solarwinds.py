@@ -117,12 +117,10 @@ class SolarWinds:
                                    caption=node_caption)
 
         self.logger.info("get_ncmnode_id - NCM node uri query results: %s.", node_id)
-        if node_caption['results']:
-            return node_caption['results'][0]['NodeID']
+        if node_id['results']:
+            return node_id['results'][0]['NodeID']
         else:
             return ""
-
-
 
     def add_node_using_snmp_v3(self, node_name, ip_address, snmpv3_username, snmpv3_priv_method, snmpv3_priv_pwd,
                                snmpv3_auth_method, snmpv3_auth_pwd):
