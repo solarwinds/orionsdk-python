@@ -81,8 +81,8 @@ class SolarWinds:
         else:
             return ""
 
-    def get_node_name_from_ip(self, ip_addr):
-        """ Returns the NodeName for the given IP_Address.  Uses a SWIS query to the SolarWinds database to retrieve this
+    def get_node_caption(self, ip_addr):
+        """ Returns the NodeCaption for the given IP_Address.  Uses a SWIS query to the SolarWinds database to retrieve this
             information.
 
             Args:
@@ -93,11 +93,11 @@ class SolarWinds:
 
         """
 
-        node_uri = self.swis.query("SELECT Caption, IP_Address FROM Orion.Nodes WHERE IP_Address = @ip_addr",
+        node_caption = self.swis.query("SELECT Caption, IP_Address FROM Orion.Nodes WHERE IP_Address = @ip_addr",
                                    ip_addr=ip_addr)
-        self.logger.info("get_node_uri - node uri query results: %s.", node_uri)
-        if node_uri['results']:
-            return node_uri['results'][0]['Caption']
+        self.logger.info("get_node_caption - node caption query results: %s.", node_caption)
+        if node_caption['results']:
+            return node_caption['results'][0]['Caption']
         else:
             return ""
 
