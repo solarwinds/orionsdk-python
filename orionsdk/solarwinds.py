@@ -13,7 +13,7 @@ from .swisclient import SwisClient
 
 class SolarWinds:
 
-    def __init__(self, npm_server, username, password, verify, logger=None):
+    def __init__(self, npm_server, username, password, verify=False, logger=None):
 
         self.logger = logger or logging.getLogger('__name__')
 
