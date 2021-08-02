@@ -264,20 +264,20 @@ class SolarWinds:
         results = self.swis.invoke('Cirrus.Nodes', 'AddNodeToNCM', self.get_node_id(node_name))
         self.logger.info("add_node_to_ncm - add node to ncm invoke results: %s", results)
     
-    def remove_node_from_ncm(self, node_name):
+    def remove_node_from_ncm(self, node_caption):
         """ Removes the specified node from the SolarWinds NCM module. Executes a SWIS invoke of the
             'RemoveNode' verb, passing it the node's NCM node id.
 
             Args:
-                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+                node_caption(string): A node name which should equal the caption used in SolarWinds for the node object.
 
             Returns:
                 None.
 
         """
 
-        results = self.swis.invoke('Cirrus.Nodes', 'RemoveNode', self.get_ncmnode_id(node_name))
-        self.logger.info("remove_node_from_ncm - add node to ncm invoke results: %s", results)
+        results = self.swis.invoke('Cirrus.Nodes', 'RemoveNode', self.get_ncmnode_id(node_caption))
+        self.logger.info("remove_node_from_ncm - remove node from ncm invoke results: %s", results)
 
     def add_node_to_udt(self, node_name):
         udt_properties = {
