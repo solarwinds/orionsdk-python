@@ -81,7 +81,7 @@ class SolarWinds:
         else:
             return ""
 
-    def get_node_caption(self, ip_addr):
+    def get_node_caption_from_ip(self, ip_addr):
         """ Returns the NodeCaption for the given IP_Address.  Uses a SWIS query to the SolarWinds database to retrieve this
             information.
 
@@ -89,13 +89,13 @@ class SolarWinds:
                 ip_addr(string): An IP which should equal the IP_Address used in SolarWinds for the node object.
 
             Returns:
-                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+                node_caption(string): A node name which should equal the caption used in SolarWinds for the node object.
 
         """
 
         node_caption = self.swis.query("SELECT Caption, IP_Address FROM Orion.Nodes WHERE IP_Address = @ip_addr",
                                    ip_addr=ip_addr)
-        self.logger.info("get_node_caption - node caption query results: %s.", node_caption)
+        self.logger.info("get_node_caption_from_ip - node caption query results: %s.", node_caption)
         if node_caption['results']:
             return node_caption['results'][0]['Caption']
         else:
@@ -245,7 +245,7 @@ class SolarWinds:
         results = self.swis.invoke('Orion.HardwareHealth.HardwareInfo', 'EnableHardwareHealth', net_object, 9)
         self.logger.info("enable_hardware_health - enable hardware health invoke results: %s", results)
 
-    def add_node_to_ncm(self, node_name):
+    def add_node_to_ncm(self, node_caption):
         """ Adds the specified node to the SolarWinds NCM module.  Executes a SWIS invoke of the
             'AddNodetoNCM' verb, passing it the node's object ID.
 
@@ -257,7 +257,7 @@ class SolarWinds:
 
         """
 
-        results = self.swis.invoke('Cirrus.Nodes', 'AddNodeToNCM', self.get_node_id(node_name))
+        results = self.swis.invoke('Cirrus.Nodes', 'AddNodeToNCM', self.get_node_id(node_caption))
         self.logger.info("add_node_to_ncm - add node to ncm invoke results: %s", results)
     
     def remove_node_from_ncm(self, node_caption):
