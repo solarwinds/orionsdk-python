@@ -11,9 +11,9 @@ def _json_serial(obj):
 
 
 class SwisClient:
-    def __init__(self, hostname, username, password, verify=False, session=None):
-        self.url = "https://{}:17778/SolarWinds/InformationService/v3/Json/".\
-                format(hostname)
+    def __init__(self, hostname, username, password, port=17778, verify=False, session=None):
+        self.url = "https://{}:{}/SolarWinds/InformationService/v3/Json/".\
+                format(hostname, port)
         self._session = session or requests.Session()
         self._session.auth = (username, password)
         self._session.headers.update({'Content-Type': 'application/json'})
