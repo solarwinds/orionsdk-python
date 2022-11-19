@@ -6,9 +6,10 @@ password = 'password'
 
 # The structure of the payload required for the verbs (Enable|Disable)Sensors is not straight-forward.
 # Below is what the payload should look like:
-payload_template = [
-    {'HardwareInfoID': int, 'HardwareCategoryStatusID': int, 'UniqueName': str},
-]
+
+# payload_template = [
+#     {'HardwareInfoID': int, 'HardwareCategoryStatusID': int, 'UniqueName': str},
+# ]
 # Notice that you can supply multiple sensors in the payload.
 
 # This script shows how to create a payload to disable/enable every sensor -
@@ -45,6 +46,8 @@ def collect_sensor_data(ip_address):
 
     # Hardware Sensors are tied to the node via the Node ID.
     #  Collect the NodeID by supplying the IP address of the node.
+    # This query assumes that we will only get one result back (targeting index 0 of the results)
+    #  You could target another index value or restructure this code if you need to accommodate multiple results.
     client = orionsdk.SwisClient(server, username, password)
     node_id = client.query(
         "SELECT NodeID, IPAddress "
