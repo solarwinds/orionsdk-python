@@ -8,7 +8,12 @@ def main():
     username = 'admin'
     password = ''
     target_node_ip = '1.2.3.4'
-    snmpv3_credential_id = 3
+    #Credential ID from Orion.Credential where Orion.Credential.CredentialOwner is:
+    #SolarWinds.Orion.Core.Models.Credentials.SnmpCredentialsV2 or
+    #SolarWinds.Orion.Core.Models.Credentials.SnmpCredentialsV3 or
+    #SolarWinds.Orion.Core.SharedCredentials.Credentials.UsernamePasswordCredential
+    #where 3 is SNMPV2 community string 'public' and present by default.
+    credential_id = 3
     orion_engine_id = 1
 
     swis = SwisClient(npm_server, username, password)
@@ -18,7 +23,7 @@ def main():
     	'BulkList': [{'Address': target_node_ip}],
     	'Credentials': [
     		{
-    			'CredentialID': snmpv3_credential_id,
+    			'CredentialID': credential_id,
     			'Order': 1
     		}
     	],
