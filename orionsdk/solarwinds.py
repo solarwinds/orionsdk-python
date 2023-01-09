@@ -13,12 +13,12 @@ from .swisclient import SwisClient
 
 class SolarWinds:
 
-    def __init__(self, npm_server, username, password, logger=None):
+    def __init__(self, npm_server, username, password, verify=False, logger=None):
 
         self.logger = logger or logging.getLogger('__name__')
 
         # Create the SWIS client for use throughout the instance.
-        self.swis = SwisClient(npm_server, username, password)
+        self.swis = SwisClient(npm_server, username, password, verify)
 
     def does_node_exist(self, node_name):
         """ Checks to see if a SolarWinds node exists with the given name.  Calls the get_node_id method of the class
@@ -78,6 +78,47 @@ class SolarWinds:
         self.logger.info("get_node_uri - node uri query results: %s.", node_uri)
         if node_uri['results']:
             return node_uri['results'][0]['Uri']
+        else:
+            return ""
+
+    def get_node_caption_from_ip(self, ip_addr):
+        """ Returns the NodeCaption for the given IP_Address.  Uses a SWIS query to the SolarWinds database to retrieve this
+            information.
+
+            Args:
+                ip_addr(string): An IP which should equal the IP_Address used in SolarWinds for the node object.
+
+            Returns:
+                node_caption(string): A node name which should equal the caption used in SolarWinds for the node object.
+
+        """
+
+        node_caption = self.swis.query("SELECT Caption, IP_Address FROM Orion.Nodes WHERE IP_Address = @ip_addr",
+                                   ip_addr=ip_addr)
+        self.logger.info("get_node_caption_from_ip - node caption query results: %s.", node_caption)
+        if node_caption['results']:
+            return node_caption['results'][0]['Caption']
+        else:
+            return ""
+
+    def get_ncmnode_id(self, node_caption):
+        """ Returns the NCM NodeID for the given NodeName.  Uses a SWIS query to the SolarWinds database to retrieve this
+            information.
+
+            Args:
+                node_name(string): A node name which should equal the caption used in SolarWinds for the node object.
+
+            Returns:
+                node_id (string): The ncm node id that corresponds to the specified node name.
+
+        """
+
+        node_id = self.swis.query("SELECT NodeID, NodeCaption FROM NCM.Nodes WHERE NodeCaption = @caption",
+                                   caption=node_caption)
+
+        self.logger.info("get_ncmnode_id - NCM node uri query results: %s.", node_id)
+        if node_id['results']:
+            return node_id['results'][0]['NodeID']
         else:
             return ""
 
@@ -204,7 +245,7 @@ class SolarWinds:
         results = self.swis.invoke('Orion.HardwareHealth.HardwareInfo', 'EnableHardwareHealth', net_object, 9)
         self.logger.info("enable_hardware_health - enable hardware health invoke results: %s", results)
 
-    def add_node_to_ncm(self, node_name):
+    def add_node_to_ncm(self, node_caption):
         """ Adds the specified node to the SolarWinds NCM module.  Executes a SWIS invoke of the
             'AddNodetoNCM' verb, passing it the node's object ID.
 
@@ -216,8 +257,23 @@ class SolarWinds:
 
         """
 
-        results = self.swis.invoke('Cirrus.Nodes', 'AddNodeToNCM', self.get_node_id(node_name))
+        results = self.swis.invoke('Cirrus.Nodes', 'AddNodeToNCM', self.get_node_id(node_caption))
         self.logger.info("add_node_to_ncm - add node to ncm invoke results: %s", results)
+    
+    def remove_node_from_ncm(self, node_caption):
+        """ Removes the specified node from the SolarWinds NCM module. Executes a SWIS invoke of the
+            'RemoveNode' verb, passing it the node's NCM node id.
+
+            Args:
+                node_caption(string): A node name which should equal the caption used in SolarWinds for the node object.
+
+            Returns:
+                None.
+
+        """
+
+        results = self.swis.invoke('Cirrus.Nodes', 'RemoveNode', self.get_ncmnode_id(node_caption))
+        self.logger.info("remove_node_from_ncm - remove node from ncm invoke results: %s", results)
 
     def add_node_to_udt(self, node_name):
         udt_properties = {
