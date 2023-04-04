@@ -4,6 +4,7 @@
 The following class is used to create an object representing a SolarWinds Orion instance.  The object provides simple
 getter and setter methods for common SolarWinds actions.  These methods abstract out the underlying details and SWQL
 calls making SolarWinds automation more accessible to a broader audience.
+Pass in port 17778 for pre-2023.1 Orion Platform.
 
 """
 
@@ -13,12 +14,12 @@ from .swisclient import SwisClient
 
 class SolarWinds:
 
-    def __init__(self, npm_server, username, password, logger=None):
-
+    def __init__(self, npm_server, username, password, logger=None, port=17774):
+        
         self.logger = logger or logging.getLogger('__name__')
 
         # Create the SWIS client for use throughout the instance.
-        self.swis = SwisClient(npm_server, username, password)
+        self.swis = SwisClient(npm_server, username, password, port)
 
     def does_node_exist(self, node_name):
         """ Checks to see if a SolarWinds node exists with the given name.  Calls the get_node_id method of the class
