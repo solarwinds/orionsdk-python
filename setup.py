@@ -33,5 +33,5 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     dependency_links=[],
-    install_requires=['six', 'requests'],
+    install_requires=['six', 'requests', 'aiohttp'],
 )

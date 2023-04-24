@@ -89,6 +89,17 @@ swis = orionsdk.SwisClient(
 swis.query("SELECT NodeID from Orion.Nodes")
 ```
 
+## Asynchronous Usage
+```python
+import orionsdk
+
+swis = orionsdk.ASyncSwisClient("server", "username", "password")
+
+aliases = await swis.invoke('Metadata.Entity', 'GetAliases', 'SELECT B.Caption FROM Orion.Nodes B')
+
+print(aliases)
+```
+
 ## License
 
 	This software is licensed under the Apache License, version 2 ("ALv2"), quoted below.

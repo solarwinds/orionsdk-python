@@ -14,6 +14,7 @@
 
 from .swisclient import SwisClient
 from .solarwinds import SolarWinds
-
+from .asyncswisclient import AsyncSwisClient
+from .asyncsolarwinds import AsyncSolarWinds
 
 __version__ = "0.4.0"
