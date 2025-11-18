@@ -11,10 +11,10 @@ if sys.argv[-1] == 'publish':
 
 setup(
     name="orionsdk",
-    version="0.4.0",  # Update also in __init__ ;
+    version="0.5.0",  # Update also in __init__ ;
     description="Python API for the SolarWinds Orion SDK",
     author="SolarWinds",
-    author_email="dan.jagnow@solarwinds.com",
+    author_email="TeamBorgs@solarwinds.com",
     url='http://github.com/solarwinds/orionsdk-python',
     license='https://github.com/solarwinds/orionsdk-python/blob/master/LICENSE',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
