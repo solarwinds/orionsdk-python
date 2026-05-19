@@ -31,15 +31,14 @@ enable this, you will need to save the self-signed cert to a file. One
 way of doing this is with OpenSSL:
 
 ```bash
-openssl s_client -connect server:17778
+openssl s_client -connect server:17774
 ```
 
-Then add an entry to your hosts file for ``SolarWinds-Orion`` and you
-will be able to verify via doing the following:
+> **Note:** The default `SolarWinds-Orion` certificate used to secure the SWIS REST endpoint (port 17774) does not contain a Subject Alternative Name (SAN) extension. Newer versions of Python/OpenSSL require a valid SAN for certificate verification to succeed. To use certificate verification, replace the endpoint certificate with a custom certificate that includes a valid SAN, then provide that certificate (or its CA) via the `verify` parameter.
 
 ```python
 import orionsdk
-swis = orionsdk.SwisClient("SolarWinds-Orion", "username", "password", verify="server.pem")
+swis = orionsdk.SwisClient("server", "username", "password", verify="server.pem")  # "server" must match the hostname in the custom certificate's SAN
 swis.query("SELECT NodeID from Orion.Nodes")
 ```
 
@@ -50,7 +49,7 @@ By default, requests timeout after 30 seconds. You can customize this by passing
 ```python
 import orionsdk
 
-swis = orionsdk.SwisClient("SolarWinds-Orion", "username", "password", timeout=30, verify="server.pem")
+swis = orionsdk.SwisClient("server", "username", "password", timeout=30, verify="server.pem")
 swis.query("SELECT NodeID from Orion.Nodes")
 ```
 
@@ -80,7 +79,7 @@ def retry_session(retries=3,
 
 
 swis = orionsdk.SwisClient(
-    "SolarWinds-Orion",
+    "server",
     "username",
     "password",
     verify="server.pem",
